@@ -10,7 +10,6 @@ gameDemo.state0.prototype = {
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.stage.backgroundColor = '#cc33ff';
-        console.log('state0');
         addChangeStateListeners();
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         let forestBG = game.add.sprite(0, 0, 'forest');
@@ -52,6 +51,7 @@ gameDemo.state0.prototype = {
 
 function changeState(i, stateNumber) {
     game.state.start('state' + stateNumber);
+    console.log('state' + stateNumber);
 };
 function addKeyCallback(key, fn, args) {
     game.input.keyboard.addKey(key).onDown.add(fn, null, null, args);
