@@ -1,13 +1,53 @@
-var gameDemo = {};
+const gameDemo = {}, centerY = 1000/2, centerX = 1500/2;
+let player, speed = 6;
+
 gameDemo.state0 = function () {};
 gameDemo.state0.prototype = {
-    preload: function () {},
+    preload: function () {
+        game.load.image('forest', 'assets/backgrounds/background.png');
+        game.load.spritesheet('player', 'assets/spritesheet/voidyDoge_walk.png', 199, 376);
+    },
     create: function () {
+        game.physics.startSystem(Phaser.Physics.ARCADE);
         game.stage.backgroundColor = '#cc33ff';
         console.log('state0');
         addChangeStateListeners();
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        let forestBG = game.add.sprite(0, 0, 'forest');
+        game.world.setBounds(0, 0, 2974, 1005);
+        player = game.add.sprite(centerX, centerY, 'player');
+        player.anchor.setTo(0.5, 0.5);
+        player.scale.setTo(0.9, 0.9);
+        game.camera.follow(player);
+        game.physics.enable(player);
+        player.body.collideWorldBounds = true;
+        player.animations.add('walk', [1, 2]);
     },
-    update: function () {}
+    update: function () {
+        if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            player.x += speed;
+            player.scale.setTo(0.9, 0.9);
+            player.animations.play('walk', 4, true);
+        } else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            player.x -= speed;
+            player.scale.setTo(-0.9, 0.9);
+            player.animations.play('walk', 4, true);
+        }else {
+            player.animations.stop('walk');
+            player.frame = 0;
+        };
+        if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+            player.y += speed;
+            if (player.y > 740){
+                player.y = 740;
+            };
+        } else if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+            player.y -= speed;
+            if (player.y < 192){
+                player.y = 192;
+            };
+        };
+    }
 };
 
 function changeState(i, stateNumber) {
