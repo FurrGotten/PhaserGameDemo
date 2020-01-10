@@ -1,9 +1,34 @@
-gameDemo.state6 = function () {};
+let emitter
+gameDemo.state6 = function(){};
 gameDemo.state6.prototype = {
-    preload: function () {},
-    create: function () {
-        game.stage.backgroundColor = '#ff0000';
-        addChangeStateListeners();
+    preload: function(){
+        game.load.image('volcano', 'assets/sprites/volcano.png');
+        game.load.image('redBall', 'assets/sprites/redBall.png');
+        game.load.image('orBall', 'assets/sprites/orBall.png');
     },
-    update: function () {}
+    create: function(){
+        game.stage.backgroundColor = '#cc6699';
+        addChangeStateListeners();
+
+        game.add.sprite(centerX, 1000, 'volcano').anchor.setTo(0.5, 1);
+
+        emitter = game.add.emitter(centerX, 500, 2000);
+        emitter.makeParticles(['redBall', 'orBall'], 0, 5000, false, true);
+        emitter.maxParticleSpeed.set(300, -300);
+        emitter.minParticleSpeed.set(-300, -100);
+        emitter.gravity = 300;
+
+
+        game.time.events.add(2000, function() {
+            emitter.start(false, 5000, 20);
+            game.time.events.loop(500, function() {
+                if (emitter.on) {
+                    emitter.on = false;
+                } else {
+                    emitter.on = true;
+                }
+            });
+        });
+    },
+    update: function(){}
 };
